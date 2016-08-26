@@ -51,6 +51,13 @@ void hashmap_put(bucket *map, char *key, void *value) {
     if (ptr == NULL) {
         map[pos].position = pnode;
     } else {
+        while (ptr != NULL) {
+            if (!strcmp(key, ptr->key)) {
+                ptr->ptrEntry = value;
+                return;
+            }
+            ptr = ptr->next;
+        }
         //solve the bucket conflict
         pnode->next = map[pos].position;
         map[pos].position = pnode;
