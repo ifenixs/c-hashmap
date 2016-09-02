@@ -6,7 +6,7 @@
 
 
 bucket* hashmap_init() {
-    bucket *map = (hashmap)malloc(sizeof(bucket) * CAPACITY);
+    bucket *map = (hashmap_t)malloc(sizeof(bucket) * CAPACITY);
     for (int i = 0; i < CAPACITY; ++i ) {
          map[i].position = NULL;
     }
@@ -25,7 +25,7 @@ void hashmap_destory(bucket *map) {
     free(map);
 }
 
-unsigned long hashcode(char *key) {
+static unsigned long hashcode(char *key) {
     register unsigned long hash = 0;
     unsigned long ch;
     while (ch = (unsigned long)*key++) {
@@ -34,7 +34,7 @@ unsigned long hashcode(char *key) {
     return hash;
 }
 
-int hash(char *key) {
+static int hash(char *key) {
     return hashcode(key) % CAPACITY;
 }
 
@@ -76,5 +76,42 @@ void *hashmap_get(bucket *map, char *key) {
         ptr = ptr->next;
     }
     return NULL;
+}
+
+void hashmap_remove(bucket *map, char *key) {
+    assert(map != NULL);
+    int pos = hash(key);
+    entry *ptr = map[pos].position;
+    entry *pre = ptr;
+
+    if (ptr->next == NULL) {
+        free(ptr);
+        map[pos].position = NULL;
+        return;
+    }
+    while (ptr != NULL) {
+        if (!strcmp(key, ptr->key)) {
+            pre->next = ptr->next;
+            free(ptr);
+            return;
+        }
+        pre = ptr;
+        ptr = ptr->next;
+    }
+}
+
+void hashmap_dump(bucket *map) {
+    int i;
+    for (i = 0; i < CAPACITY; i++) {
+        if (map[i].position != NULL) {
+            printf("bucket %d:  ", i);
+            entry *ptr = map[i].position;
+            while (ptr != NULL) {
+                printf(" ->|%s|", ptr->key);
+                ptr = ptr->next;
+            }
+            printf("\n");
+        }
+    }
 }
 

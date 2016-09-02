@@ -1,5 +1,5 @@
-#ifndef HASHMAP_H
-#define HASHMAP_H
+#ifndef _HASHMAP_H
+#define _HASHMAP_H
 
 // capacity of bucket
 #define CAPACITY 4097
@@ -14,7 +14,7 @@ typedef struct {
     entry *position;
 } bucket;
 
-typedef bucket * hashmap;
+typedef bucket * hashmap_t;
 
 
 extern bucket *
@@ -32,6 +32,12 @@ hashmap_put(bucket *map, char *key, void *value);
 
 extern void*
 hashmap_get(bucket *map, char *key);
+
+extern void
+hashmap_remove(bucket *map, char *key);
+
+extern void
+hashmap_dump(bucket *map);
 
 extern void
 hashmap_destory(bucket *map);
