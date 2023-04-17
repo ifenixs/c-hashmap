@@ -1,46 +1,45 @@
 #ifndef _HASHMAP_H
 #define _HASHMAP_H
 
-// capacity of bucket
-#define CAPACITY 4097
+// 
+// FILE: hashmap.h
+//
+// @author ifenix fenice.suns@gmail.com
+// 
+// @brief A fixed-size hashmap which can store key-value pair of char* and void*
+//
+// Note: The key cannot be NULL
 
-typedef struct _entry{
-    char *key;
-    void *ptrEntry;
-    struct _entry *next;
-} entry;
+#include <stddef.h>
 
-typedef struct {
-    entry *position;
-} bucket;
+struct hashmap;
+typedef struct hashmap* hashmap_t;
 
-typedef bucket * hashmap_t;
+typedef void
+(*hashmap_traversal_t)(const char* key, void* value);
 
+hashmap_t
+hashmap_init(size_t capacity);
 
-extern bucket *
-hashmap_init();
+int
+hashmap_put(hashmap_t hmap, const char* key, void* value);
 
-static int
-hash(char *key);
+void*
+hashmap_get(hashmap_t hmap, const char* key);
 
-static unsigned long
-hashcode(char *key);
+void
+hashmap_del(hashmap_t hmap, const char* key);
 
-extern void
-hashmap_put(bucket *map, char *key, void *value);
+void
+hashmap_foreach(hashmap_t hmap, hashmap_traversal_t callback);
 
+size_t
+hashmap_mem(hashmap_t hmap);
 
-extern void*
-hashmap_get(bucket *map, char *key);
+void
+hashmap_dump(hashmap_t hmap);
 
-extern void
-hashmap_remove(bucket *map, char *key);
+void
+hashmap_destory(hashmap_t hmap);
 
-extern void
-hashmap_dump(bucket *map);
-
-extern void
-hashmap_destory(bucket *map);
-
-
-#endif
+#endif	// _HASHMAP_H

@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include "hashmap.h"
 
-int main(int argc, char *argv[]) {
 
-    hashmap_t map = hashmap_init();
+int
+main(int argc, char *argv[]) {
+
+    hashmap_t map = hashmap_init(1023);
 
     FILE *str_case;
     str_case = fopen("str_case.dat", "r");
@@ -16,7 +18,6 @@ int main(int argc, char *argv[]) {
     }
     fclose(str_case);
 
-    //hashmap_remove(map, "KY8831g");
     hashmap_dump(map);
     hashmap_destory(map);
     exit(0);
